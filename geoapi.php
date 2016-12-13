@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 <!DOCTYPE html>
 <html>
 <head>
-    <title>APIを用いた住所検索</title>
+    <title>Google Maps APIで住所検索</title>
     <meta charset="UTF-8">
 </head>
 

@@ -2,7 +2,6 @@
 $x = $_POST['x'];
 $y = $_POST['y'];
 $town = $_POST['town'];
-
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +21,6 @@ $town = $_POST['town'];
     <script>
       var map;
       var infowindow;
-
       function initialize() {
         // var area = new google.maps.LatLng(35.339802, 139.409177);
         var area = new google.maps.LatLng(<?php echo $y;?>, <?php echo $x;?>);
@@ -30,7 +28,6 @@ $town = $_POST['town'];
           center: area,
           zoom: 15
         });
-
         var request = {
           location: area,
           radius: 500,
@@ -41,8 +38,6 @@ $town = $_POST['town'];
         var service = new google.maps.places.PlacesService(map);
         service.textSearch(request, callback);
       }
-
-
       function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
@@ -50,14 +45,12 @@ $town = $_POST['town'];
           }
         }
       }
-
       function createMarker(result) {
         var placeLoc = result.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
           position: result.geometry.location
         });
-
         google.maps.event.addListener(marker, 'click', function() {
           var request = {
             reference: result.reference
@@ -76,9 +69,7 @@ $town = $_POST['town'];
           infowindow.open(map, this);
         });
       }
-
       google.maps.event.addDomListener(window, 'load', initialize);
-
     </script>
   </head>
   <body>
