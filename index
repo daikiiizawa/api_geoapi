@@ -1,0 +1,49 @@
+<?php
+
+// $post = "変換したい住所 例：滋賀県大津市1";
+// $post = "藤沢市羽鳥3-17-14";
+// $apiurl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+// $json = json_decode(@file_get_contents($apiurl.$post),false);
+// $lat = $json->results[0]->geometry->location->lat;
+// $lon = $json->results[0]->geometry->location->lng;
+
+// var_dump($json);
+
+
+//郵便番号
+$postNumber = '藤沢市羽鳥';//調布市サイコー！
+//APIからデータを取得～配列に変換
+// $googleMapsApiData = json_decode(@file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?sensor=false&language=ja&address='.$postNumber), true);
+$googleMapsApiData = json_decode(@file_get_contents('http://geoapi.heartrails.com/api/xml?method=suggest&matching=like&keyword=%E6%96%B0%E5%AE%BF%E5%8C%BA'.$postNumber), true);
+
+//APIから正しくデータを取得できたかチェック
+if($googleMapsApiData['status'] !== 'OK'){
+    echo 'すてーたすがOKやないで！';
+    exit;
+}
+//都道府県を取得
+$addressArray = $googleMapsApiData['results'][0]['address_components'];
+
+var_dump($addressArray);
+unset($addressArray[0]);//郵便番号のトコを消して、、、
+array_pop($addressArray);//国のトコも消して、、、
+$addressArray = array_reverse($addressArray);//配列を逆さにして、、、
+$tdfk = $addressArray[0]['long_name'];//コレが都道府県
+unset($addressArray[0]);//市区町村の取得用に都道府県も消して、、、
+
+//市区町村を取得
+$skcsStrings = '';
+foreach($addressArray as $v){
+    $skcsStrings .= $v['long_name'];//市区町村部分の文字列を連結させて、、、
+}
+$skcs = $skcsStrings;//コレが市区町村以下
+
+//緯度経度を取得
+
+$lat = $googleMapsApiData['results'][0]['geometry']['location']['lat'];//コレが緯度
+$lng = $googleMapsApiData['results'][0]['geometry']['location']['lng'];//コレが経度
+
+var_dump($skcs);
+var_dump($tdfk);
+
+?>
